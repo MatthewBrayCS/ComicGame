@@ -33,7 +33,6 @@ public class Tester {
         fight.setBounds(0,0,1920,1080);
         fight.setVisible(true);
         fight.setExtendedState(Frame.MAXIMIZED_BOTH);
-        fight.setUndecorated(true);
     }
 
 }

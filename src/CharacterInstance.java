@@ -20,7 +20,7 @@ public class CharacterInstance{
     }
 
     public void  modifyAP(int input) {
-        currentAP =+ input;
+        currentAP += input;
     }
 
     public void stun(int input) {

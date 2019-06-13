@@ -14,7 +14,7 @@ public class Character {
     private int strength;
     private int dexterity;
     private int constitution;
-    private int maxap = 25;
+    private int maxap = 30;
     private int maxhealth;
 
     private String moves[];
@@ -91,8 +91,8 @@ public class Character {
         return strength;
     }
 
-    public BufferedImage[] getImg() {
-        return img;
+    public BufferedImage getImg(int image) {
+        return img[image];
     }
 
     public String getDesc() {
@@ -119,15 +119,15 @@ public class Character {
         return weak;
     }
 
-    public String[] getMovdesc() {
-        return movdesc;
+    public String getMovdesc(int move) {
+        return movdesc[move];
     }
 
-    public String[] getMoves() {
-        return moves;
+    public String getMoves(int move) {
+        return moves[move];
     }
 
-    public String[] getMovname() {
-        return movname;
+    public String getMovname(int move) {
+        return movname[move];
     }
 }

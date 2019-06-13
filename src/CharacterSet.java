@@ -134,7 +134,7 @@ public class CharacterSet {
     moveset[x][0] = "DAM0L1PHY0";
     moveset[x][1] = "DAM0M1LAS0";
     moveset[x][2] = "DAM0H1LAS0";
-    moveset[x][3] = "SELHEL0500";
+    moveset[x][3] = "SELHEL0750";
 
     movenam[x][0] = "Punch";
     movenam[x][1] = "Repulsor Blast";
@@ -144,7 +144,7 @@ public class CharacterSet {
     movebio[x][0] = "A basic attack that deals low damage. Types: Physical";
     movebio[x][1] = "Blast an enemy with your repulsors to deal medium damage to them. Types: Laser";
     movebio[x][2] = "Blast an enemy with your Unibeam to deal high damage to them. Type: Laser";
-    movebio[x][3] = "Use your self-repair technology to heal half of your health. (cannot go above max health)";
+    movebio[x][3] = "Use your self-repair technology to heal 75% of your health. (cannot go above max health)";
 
     avengers[6] = new Character("Iron Man","",false,
             "Avengers","Iron Man & War Machine",10,7,4,  moveset[x], movenam[x],
@@ -374,7 +374,7 @@ public class CharacterSet {
     moveset[x][0] = "DAM0L1PHY0";
     moveset[x][1] = "DAM0M2MAGPHY0";
     moveset[x][2] = "DAM0H1MAG0";
-    moveset[x][3] = "SELHEL1001";
+    moveset[x][3] = "SUP0HEL11002";
 
     movenam[x][0] = "Punch";
     movenam[x][1] = "Telekinesis";
@@ -384,7 +384,7 @@ public class CharacterSet {
     movebio[x][0] = "A basic attack that deals low damage. Types: Physical";
     movebio[x][1] = "Use your telekinesis to throw things at an enemy for medium damage. Types: Magic, Physical";
     movebio[x][2] = "Hit an enemy with your Mystic Bolts to deal high damage to them. Types: Magic";
-    movebio[x][3] = "Reverse time for yourself to the beginning of the battle when you were unhurt.";
+    movebio[x][3] = "Reverse time for your team to the beginning of the battle when you were unhurt, stunning yourself in the process.";
 
     avengers[18] = new Character("Dr Strange","",true,
             "Avengers","Sorcerers",2,6,3,  moveset[x], movenam[x],
@@ -473,7 +473,7 @@ public class CharacterSet {
     x++;
     moveset[x][0] = "DAM0L2PHYAVE0";
     moveset[x][1] = "DAM0M2PHYAVE0";
-    moveset[x][2] = "SUP0HEL0400";
+    moveset[x][2] = "SUP0HEL00500";
     moveset[x][3] = "DAM0H2BLAAVE0";
 
     movenam[x][0] = "Punch";
@@ -483,11 +483,11 @@ public class CharacterSet {
 
     movebio[x][0] = "A basic attack that deals low damage. Types: Physical, Anti Venom";
     movebio[x][1] = "Attack an enemy with your tentacles to deal medium damage to them. Types: Physical, Anti Venom";
-    movebio[x][2] = "Heal a friendly target (including yourself) for 40% of their health. (cannot go above max health)";
+    movebio[x][2] = "Heal a friendly target (including yourself) for 50% of their health. (cannot go above max health)";
     movebio[x][3] = "Attack an enemy with your claws to deal high damage to them. Types: Bladed, Anti Venom";
 
     avengers[23] = new Character("Anti Venom","",true,
-            "Avengers","Anti Venom",10,5,5,  moveset[x], movenam[x],
+            "Avengers","Anti Venom",10,5,6,  moveset[x], movenam[x],
             movebio[x], "HEL6","","POIEMP");
 
     x++;

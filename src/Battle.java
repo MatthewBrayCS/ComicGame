@@ -9,160 +9,150 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Battle extends JFrame {
-    public double width;
-    public double height;
+    private double width;
+    private double height;
 
-    public CharacterInstance[] player = new CharacterInstance[4];
-    public CharacterInstance[] enemy = new CharacterInstance[4];
+    private CharacterInstance[] player = new CharacterInstance[4];
+    private CharacterInstance[] enemy = new CharacterInstance[4];
 
-    public BufferedImage bg;
+    private BufferedImage bg;
 
-    Random rand = new Random();
+    private Random rand = new Random();
 
-    JPanel pane;
+    private JPanel pane;
 
-    JPanel playerboxes[] = new JPanel[4];
-    JLabel pname[] = new JLabel[4];
-    JLabel phealth[] = new JLabel[4];
-    JLabel pap[] = new JLabel[4];
-    JLabel pstr[] = new JLabel[4];
-    JLabel pdex[] = new JLabel[4];
-    JLabel pcon[] = new JLabel[4];
-    JPanel pimage[] = new JPanel[4];
+    private JPanel playerboxes[] = new JPanel[4];
+    private JLabel pname[] = new JLabel[4];
+    private JLabel phealth[] = new JLabel[4];
+    private JLabel pap[] = new JLabel[4];
+    private JLabel pstr[] = new JLabel[4];
+    private JLabel pdex[] = new JLabel[4];
+    private JLabel pcon[] = new JLabel[4];
+    private JPanel pimage[] = new JPanel[4];
 
-    JPanel enemyboxes[] = new JPanel[4];
-    JLabel ename[] = new JLabel[4];
-    JLabel ehealth[] = new JLabel[4];
-    JLabel eap[] = new JLabel[4];
-    JLabel estr[] = new JLabel[4];
-    JLabel edex[] = new JLabel[4];
-    JLabel econ[] = new JLabel[4];
-    JPanel eimage[] = new JPanel[4];
+    private JPanel enemyboxes[] = new JPanel[4];
+    private JLabel ename[] = new JLabel[4];
+    private JLabel ehealth[] = new JLabel[4];
+    private JLabel eap[] = new JLabel[4];
+    private JLabel estr[] = new JLabel[4];
+    private JLabel edex[] = new JLabel[4];
+    private JLabel econ[] = new JLabel[4];
+    private JPanel eimage[] = new JPanel[4];
 
-    JTextArea moveinfo = new JTextArea("move info");
-    JButton movebutton[] = new JButton[4];
-    JButton moveconfirm = new JButton("Confirm");
-    JLabel moveap = new JLabel("Action Points to spend: " + "");
-    JPanel movebox = new JPanel();
-    JTextArea infolab = new JTextArea("");
-    JPanel infobox = new JPanel();
-    JButton defend = new JButton("Defend");
-    JButton fight = new JButton("Fight");
-    JLabel turnap = new JLabel("Action Points to spend: " + "");
-    JPanel turnbox = new JPanel();
+    private JTextArea moveinfo = new JTextArea("move info");
+    private JButton movebutton[] = new JButton[4];
+    private JButton moveconfirm = new JButton("Confirm");
+    private JLabel moveap = new JLabel("Action Points to spend: " + "");
+    private JPanel movebox = new JPanel();
+    private JTextArea infolab = new JTextArea("");
+    private JPanel infobox = new JPanel();
+    private JButton defend = new JButton("Defend");
+    private JButton fight = new JButton("Fight");
+    private JLabel turnap = new JLabel("Action Points to spend: " + "");
+    private JPanel turnbox = new JPanel();
 
-    JLabel effective[][] = new JLabel[2][4];
-    JLabel ineffective[][] = new JLabel[2][4];
+    private JLabel effective[][] = new JLabel[2][4];
+    private JLabel ineffective[][] = new JLabel[2][4];
 
-    public int curchar;
-    public int curmove;
+    private  int curchar;
+    private  int curmove;
 
-    public String initiative[] = new String[8];
-    public int inipointer = 7;
-    public boolean playerturn;
-    public boolean targetfriendly = false;
-    public boolean targetenemy = false;
+    private  String initiative[] = new String[8];
+    private  int inipointer = 7;
+    private  boolean playerturn;
 
-    public Character attacker;
-    public Character target[];
+    public ActionListener movelistener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //check if move was selected, if so display appropriate information and display he confirm button
+            for (int i = 0; i < 4; i++) {
+                if (e.getSource() == movebutton[i]) {
+                    curmove = i;
+                    moveinfo.setText(player[curchar].getStats().getMovdesc(curmove));
+                    moveinfo.setVisible(true);
+                    moveconfirm.setVisible(true);
+                }
+            }
 
-//    public ActionListener movelistener = new ActionListener() {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            System.out.println(width);
-//            for (int i = 0; i < 4; i++) {
-//                if (e.getSource() == movebutton[i]) {
-//                    curmove = i;
-//                    attacker = player[curchar];
-//                    moveinfo.setText(player[curchar].movdesc[curmove]);
-//                    moveinfo.setVisible(true);
-//                    moveconfirm.setVisible(true);
-//                }
-//            }
-//            if (e.getSource() == moveconfirm) {
-//                attacker.currap += 5;
-//                final BufferedImage pic = player[curchar].img[curmove+1];
-//                pimage[curchar].setVisible(false);
-//                pimage[curchar] = new JPanel() {
-//                    @Override
-//                    protected void paintComponent(Graphics g) {
-//                        super.paintComponent(g);
-//                        g.drawImage(pic, 0, 0, 230, 460, null);
-//                    }
-//                };
-//                pimage[curchar].setLayout(null);
-//                pimage[curchar].setOpaque(false);
-//                pane.add(pimage[curchar]);
-//                pimage[curchar].addMouseListener(imglistener);
-//                pimage[curchar].setBounds(10 + (240 * curchar), 350, 230, 460);
-//                pimage[curchar].setVisible(true);
-//                switch (curmove) {
-//                    case 1:
-//                        attacker.currap -= 10;
-//                        break;
-//                    case 2:
-//                        attacker.currap -= 15;
-//                        break;
-//                    case 3:
-//                        attacker.currap -= 20;
-//                        break;
-//                }
-//                moveinfo.setVisible(false);
-//                moveconfirm.setVisible(false);
-//                movebox.setVisible(false);
-//                readmove();
-//            }
-//        }
-//    };
-//
-//    public ActionListener action = new ActionListener() {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            turnbox.setVisible(false);
-//            if (defend == e.getSource()) {
-//                infobox.setVisible(true);
-//                infolab.setText(player[curchar].name + " is blocking");
-//                player[curchar].blocking++;
-//                player[curchar].currap += 10;
-//                updatestats();
-//                turnwait wait = new turnwait();
-//                wait.start();
-//            } else {
-//                for (int i = 0; i < 4; i++) {
-//                    movebutton[i].setText(player[curchar].movname[i]);
-//                }
-//                moveap.setText("Action Points to spend: " + player[curchar].currap);
-//                movebox.setVisible(true);
-//            }
-//        }
-//    };
-//
-//    public MouseListener imglistener = new MouseListener() {
-//        @Override
-//        public void mouseClicked(MouseEvent e) {
-//
-//        }
-//
-//        @Override
-//        public void mousePressed(MouseEvent e) {
-//
-//        }
-//
-//        @Override
-//        public void mouseReleased(MouseEvent e) {
-//
-//        }
-//
-//        @Override
-//        public void mouseEntered(MouseEvent e) {
-//
-//        }
-//
-//        @Override
-//        public void mouseExited(MouseEvent e) {
-//
-//        }
-//    };
+            //if a move was confirmed then check if the player can do this move and if so change appropriate values and call the move reader
+            if (e.getSource() == moveconfirm) {
+                player[curchar].modifyAP(5);
+
+                //change the character's image to that of the move
+                final BufferedImage pic = player[curchar].getStats().getImg(curmove+1);
+                pimage[curchar].setVisible(false);
+                pimage[curchar] = new JPanel() {
+                    @Override
+                    protected void paintComponent(Graphics g) {
+                        super.paintComponent(g);
+                        g.drawImage(pic, 0, 0, 230, 460, null);
+                    }
+                };
+                pimage[curchar].setLayout(null);
+                pimage[curchar].setOpaque(false);
+                pane.add(pimage[curchar]);
+                pimage[curchar].setBounds(10 + (240 * curchar), 350, 230, 460);
+                pimage[curchar].setVisible(true);
+
+                switch (curmove) {
+                    case 1:
+                        player[curchar].modifyAP(-10);
+                        break;
+                    case 2:
+                        player[curchar].modifyAP(-20);
+                        break;
+                    case 3:
+                        player[curchar].modifyAP(-30);
+                        break;
+                }
+                moveinfo.setVisible(false);
+                moveconfirm.setVisible(false);
+                movebox.setVisible(false);
+                //readmove();
+            }
+        }
+    };
+
+    public ActionListener action = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            turnbox.setVisible(false);
+
+            //if defend is selected then increase AP and block counter, show message and pass turn
+            if (defend == e.getSource()) {
+                infobox.setVisible(true);
+                infolab.setText(player[curchar].getStats().getName() + " is blocking");
+                player[curchar].block(1);
+                player[curchar].modifyAP(10);
+                updatestats();
+                turnwait wait = new turnwait();
+                wait.start();
+            } else {
+
+                //if attack is selected then change button text to represent moves and disable them
+                for (int i = 0; i < 4; i++) {
+                    movebutton[i].setText(player[curchar].getStats().getMovname(i));
+                    movebutton[i].setEnabled(false);
+                }
+
+
+                //check the player's AP and enable appropriate buttons
+                movebutton[0].setEnabled(true);
+                if (player[curchar].getCurrentAP() >= 10) {
+                    movebutton[1].setEnabled(true);
+                }
+                if (player[curchar].getCurrentAP() >= 20) {
+                    movebutton[2].setEnabled(true);
+                }
+                if (player[curchar].getCurrentAP() >= 30) {
+                    movebutton[3].setEnabled(true);
+                }
+
+                moveap.setText("Action Points to spend: " + player[curchar].getCurrentAP());
+                movebox.setVisible(true);
+            }
+        }
+    };
 
     public Battle(CharacterInstance a, CharacterInstance b, CharacterInstance c, CharacterInstance d, CharacterInstance e, CharacterInstance f, CharacterInstance g, CharacterInstance h, BufferedImage background) {
         bg = background;
@@ -178,7 +168,6 @@ public class Battle extends JFrame {
         this.setLayout(null);
         this.setExtendedState(MAXIMIZED_BOTH);
         Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
-        System.out.println(Toolkit.getDefaultToolkit().getScreenResolution());
         //attempts to scale the resolution to the screen
         width = screensize.width / 1920;
         height = screensize.height / 1080;
@@ -249,7 +238,7 @@ public class Battle extends JFrame {
             pcon[i].setBounds(0, (int)(height * 150), (int)(width * 230), (int)(height * 30));
             pcon[i].setVisible(true);
 
-            final BufferedImage pic = player[i].getStats().getImg()[0];
+            final BufferedImage pic = player[i].getStats().getImg(0);
             pimage[i] = new JPanel() {
                 @Override
                 protected void paintComponent(Graphics g) {
@@ -259,7 +248,6 @@ public class Battle extends JFrame {
             };
             pimage[i].setLayout(null);
             pimage[i].setOpaque(false);
-            //pimage[i].addMouseListener(imglistener);                                                      LISTENER
             pane.add(pimage[i]);
             pimage[i].setBounds((int)(width * x), (int)(height * (y - 470)), (int)(width * 230), (int)(height * 460));
             pimage[i].setVisible(true);
@@ -319,7 +307,7 @@ public class Battle extends JFrame {
             econ[i].setBounds(0, (int)(height * 150), (int)(width * 230), (int)(height * 30));
             econ[i].setVisible(true);
 
-            final BufferedImage pic = enemy[i].getStats().getImg()[0];
+            final BufferedImage pic = enemy[i].getStats().getImg(0);
             eimage[i] = new JPanel() {
                 @Override
                 protected void paintComponent(Graphics g) {
@@ -329,7 +317,6 @@ public class Battle extends JFrame {
             };
             eimage[i].setLayout(null);
             eimage[i].setOpaque(false);
-            //eimage[i].addMouseListener(imglistener);                                                              LISTENER
             pane.add(eimage[i]);
             eimage[i].setBounds((int)(width * x), (int)(height * (y + 190)), (int)(width * 230), (int)(height * 460));
             eimage[i].setVisible(true);
@@ -350,13 +337,13 @@ public class Battle extends JFrame {
         turnap.setVisible(true);
 
         turnbox.add(fight);
-        //fight.addActionListener(action);                                                      LISTENER
+        fight.addActionListener(action);
         fight.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 26));
         fight.setBounds((int)(width * 50), (int)(height * 50), (int)(width * 250), (int)(height * 150));
         fight.setVisible(true);
 
         turnbox.add(defend);
-        //defend.addActionListener(action);                                                     LISTENER
+        defend.addActionListener(action);
         defend.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 26));
         defend.setBounds((int)(width * 310), (int)(height * 50), (int)(width * 250), (int)(height * 150));
         defend.setVisible(true);
@@ -396,7 +383,7 @@ public class Battle extends JFrame {
             movebox.add(movebutton[i]);
             movebutton[i].setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
             movebutton[i].setBounds((int)(width * x), (int)(height * y), (int)(width * 140), (int)(height * 100));
-            //movebutton[i].addActionListener(movelistener);                                                    LISTENER
+            movebutton[i].addActionListener(movelistener);
             movebutton[i].setMargin(new Insets(0,0,0,0));
             movebutton[i].setVisible(true);
             movebutton[i].setLayout(null);
@@ -410,7 +397,7 @@ public class Battle extends JFrame {
         y += 50;
         movebox.add(moveconfirm);
         moveconfirm.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 22));
-        //moveconfirm.addActionListener(movelistener);                                                          LISTENER
+        moveconfirm.addActionListener(movelistener);
         moveconfirm.setBounds((int)(width * x), (int)(height * y), (int)(width * 280), (int)(height * 50));
         moveconfirm.setVisible(false);
 
@@ -493,73 +480,78 @@ public class Battle extends JFrame {
             rolls[selected] = -1;
         }
 
-        //nextturn(); TODO
+        testConditions();
+        nextturn();
 
     }
 
-//    public void enemyturn(Character curr) {
-//        System.out.println(curr.name);
-//        playerturn = false;
-//    }
-//
-//    public void taketurn(Character curr) {
-//        playerturn = true;
-//        System.out.println(curr.name);
-//        playerboxes[curchar].setBackground(Color.ORANGE);
-//        if (curr.stunned > 0) {
-//            curr.stunned--;
-//            infobox.setVisible(true);
-//            infolab.setText(curr.name + " is stunned and misses a turn");
-//            turnwait wait = new turnwait();
-//            wait.start();
-//        } else {
-//            turnbox.setVisible(true);
-//            turnap.setText("Action Points to spend: " + player[curchar].currap);
-//        }
-//    }
-//
-//    public void nextturn() {
-//        movebox.setVisible(false);
-//        infobox.setVisible(false);
-//        for(int i = 0; i < 4; i++) {
-//            playerboxes[i].setBackground(Color.white);
-//        }
-//        if (inipointer == 7) {
-//            inipointer = 0;
-//        } else {
-//            inipointer++;
-//        }
-//        if (initiative[inipointer].charAt(0) == 'p') {
-//            curchar = Integer.parseInt("" + initiative[inipointer].charAt(1));
-//            taketurn(player[curchar]);
-//        } else {
-//            curchar = Integer.parseInt("" + initiative[inipointer].charAt(1));
-//            enemyturn(enemy[curchar]);
-//       }
-//
-//       /* for (int i = 0; i < 4; i++) {
-//            if (initiative[inipointer] == player[i].name) {
-//                curchar = i;
-//                taketurn(player[i]);
-//            }
-//            if (initiative[inipointer] == enemy[i].name) {
-//                curchar = i;
-//                enemyturn(enemy[i]);
-//            }
-//
-//        }
-//            */
-//    }
-//
-//    public void updatestats() {
-//        for (int i = 0; i < 4; i++) {
-//            phealth[i].setText("Health: " + player[i].currhealth + "/" + player[i].maxhealth);
-//            pap[i].setText("Action Points: " + player[i].currap + "/" + player[i].maxap);
-//            ehealth[i].setText("Health: " + enemy[i].currhealth + "/" + enemy[i].maxhealth);
-//            eap[i].setText("Action Points: " + enemy[i].currap + "/" + enemy[i].maxap);
-//        }
-//    }
-//
+    public void testConditions() {
+    }
+
+    public void enemyturn(CharacterInstance curr) {
+        System.out.println(curr.getStats().getName());
+        playerturn = false;
+    }
+
+    public void taketurn(CharacterInstance curr) {
+        playerturn = true;
+        System.out.println(curr.getStats().getName());
+
+        //indicates to the player whose turnh it is
+        playerboxes[curchar].setBackground(Color.ORANGE);
+        //decrement block counter if necessary
+        if (curr.getBlockingTurns() > 0) {
+            curr.block(-1);
+        }
+        if (curr.getStunTurns() > 0) {
+            //end turn if stunned
+            curr.stun(-1);
+            curr.modifyAP(5);
+            infobox.setVisible(true);
+            infolab.setText(curr.getStats().getName() + " is stunned and misses a turn");
+            turnwait wait = new turnwait();
+            wait.start();
+        } else {
+            //if not display AP value and show action buttons
+            turnbox.setVisible(true);
+            turnap.setText("Action Points to spend: " + player[curchar].getCurrentAP());
+        }
+    }
+
+    public void nextturn() {
+        movebox.setVisible(false);
+        infobox.setVisible(false);
+        for(int i = 0; i < 4; i++) {
+            playerboxes[i].setBackground(Color.white);
+        }
+
+        //loop initiative pointer if needed
+        if (inipointer == 7) {
+            inipointer = 0;
+        } else {
+            inipointer++;
+        }
+
+        //check if enemy or player turn and call appropriate methods
+        if (initiative[inipointer].charAt(0) == 'p') {
+            curchar = Integer.parseInt("" + initiative[inipointer].charAt(1));
+            taketurn(player[curchar]);
+        } else {
+            curchar = Integer.parseInt("" + initiative[inipointer].charAt(1));
+            enemyturn(enemy[curchar]);
+       }
+    }
+
+    public void updatestats() {
+        //update AP and health stats for both teams
+        for (int i = 0; i < 4; i++) {
+            phealth[i].setText("Health: " + player[i].getCurrentHealth() + "/" + player[i].getStats().getMaxhealth());
+            pap[i].setText("Action Points: " + player[i].getCurrentAP() + "/" + player[i].getStats().getMaxap());
+            ehealth[i].setText("Health: " + enemy[i].getCurrentHealth() + "/" + enemy[i].getStats().getMaxhealth());
+            eap[i].setText("Action Points: " + enemy[i].getCurrentAP() + "/" + enemy[i].getStats().getMaxap());
+        }
+    }
+
 //    public void readmove() {
 //        int pointer = 0;
 //        String move = attacker.moves[curmove];
@@ -612,17 +604,17 @@ public class Battle extends JFrame {
 //        }
 //    }
 //
-//    class turnwait extends Thread {
-//
-//        public void run() {
-//            try {
-//                Thread.sleep(2500);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            nextturn();
-//        }
-//    }
+    //Thread to wait between turns for players to read
+    class turnwait extends Thread {
+        public void run() {
+            try {
+                Thread.sleep(2500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            nextturn();
+        }
+   }
 //
 //
 //
