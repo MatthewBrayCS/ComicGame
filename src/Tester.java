@@ -18,14 +18,21 @@ public class Tester {
         }
 
         CharacterInstance[] fightCharacters = new CharacterInstance[8];
-        fightCharacters[0] = new CharacterInstance(chars.getAvengers()[0]);
+        fightCharacters[0] = new CharacterInstance(chars.getAvengers()[6]);
         fightCharacters[1] = new CharacterInstance( chars.getAvengers()[18]);
         fightCharacters[2] = new CharacterInstance( chars.getAvengers()[23]);
         fightCharacters[3] = new CharacterInstance( chars.getAvengers()[9]);
-        fightCharacters[4] = new CharacterInstance( chars.getAvengers()[4]);
+        fightCharacters[4] = new CharacterInstance( chars.getAvengers()[15]);
         fightCharacters[5] = new CharacterInstance( chars.getAvengers()[5]);
-        fightCharacters[6] = new CharacterInstance( chars.getAvengers()[6]);
+        fightCharacters[6] = new CharacterInstance( chars.getAvengers()[30]);
         fightCharacters[7] = new CharacterInstance( chars.getAvengers()[7]);
+
+        String[] weak = fightCharacters[1].getStats().getResistanceCodes();
+        String[] weak2 = fightCharacters[1].getStats().getResistanceNames();
+        for (int i = 0; i < weak.length; i++) {
+            System.out.println(weak[i]);
+            System.out.println(weak2[i]);
+        }
 
         Battle fight = new Battle(fightCharacters[0],fightCharacters[1],fightCharacters[2],fightCharacters[3],fightCharacters[4],fightCharacters[5],fightCharacters[6],fightCharacters[7], bg);
         fight.setDefaultCloseOperation(3);

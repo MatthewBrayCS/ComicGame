@@ -1,4 +1,4 @@
-public class CharacterInstance{
+ class CharacterInstance{
 
     private Character stats;
 
@@ -7,7 +7,7 @@ public class CharacterInstance{
     private int blockingTurns;
     private int stunTurns;
 
-    public CharacterInstance(Character characterRef) {
+    CharacterInstance(Character characterRef) {
         stats = characterRef;
         currentHealth = stats.getMaxhealth();
         currentAP = 10;
@@ -17,10 +17,18 @@ public class CharacterInstance{
 
     public void modifyHealth(int input) {
         currentHealth += input;
+        //stops the character going above max health
+        if (currentHealth > stats.getMaxhealth()) {
+            currentHealth = stats.getMaxhealth();
+        }
     }
 
     public void  modifyAP(int input) {
         currentAP += input;
+        //stops the character going above max AP
+        if (currentAP > stats.getMaxap()) {
+            currentAP = stats.getMaxap();
+        }
     }
 
     public void stun(int input) {

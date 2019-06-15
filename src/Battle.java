@@ -105,10 +105,11 @@ public class Battle extends JFrame {
                         player[curchar].modifyAP(-30);
                         break;
                 }
+                player[curchar].modifyAP(5);
                 moveinfo.setVisible(false);
                 moveconfirm.setVisible(false);
                 movebox.setVisible(false);
-                //readmove();
+                readMove(player[curchar].getStats().getMoves(curmove));
             }
         }
     };
@@ -124,8 +125,8 @@ public class Battle extends JFrame {
                 infolab.setText(player[curchar].getStats().getName() + " is blocking");
                 player[curchar].block(1);
                 player[curchar].modifyAP(10);
-                updatestats();
-                turnwait wait = new turnwait();
+                updateStats();
+                turnWait wait = new turnWait();
                 wait.start();
             } else {
 
@@ -481,19 +482,24 @@ public class Battle extends JFrame {
         }
 
         testConditions();
-        nextturn();
+        nextTurn();
 
     }
 
-    public void testConditions() {
+    private void testConditions() {
+        initiative[0] = "p0";
+        initiative[1] = "p2";
+        player[0].modifyAP(20);
+        player[0].modifyHealth(-30);
+        updateStats();
     }
 
-    public void enemyturn(CharacterInstance curr) {
+    private void enemyTurn(CharacterInstance curr) {
         System.out.println(curr.getStats().getName());
         playerturn = false;
     }
 
-    public void taketurn(CharacterInstance curr) {
+    private void takeTurn(CharacterInstance curr) {
         playerturn = true;
         System.out.println(curr.getStats().getName());
 
@@ -509,7 +515,7 @@ public class Battle extends JFrame {
             curr.modifyAP(5);
             infobox.setVisible(true);
             infolab.setText(curr.getStats().getName() + " is stunned and misses a turn");
-            turnwait wait = new turnwait();
+            turnWait wait = new turnWait();
             wait.start();
         } else {
             //if not display AP value and show action buttons
@@ -518,7 +524,7 @@ public class Battle extends JFrame {
         }
     }
 
-    public void nextturn() {
+    private void nextTurn() {
         movebox.setVisible(false);
         infobox.setVisible(false);
         for(int i = 0; i < 4; i++) {
@@ -535,14 +541,14 @@ public class Battle extends JFrame {
         //check if enemy or player turn and call appropriate methods
         if (initiative[inipointer].charAt(0) == 'p') {
             curchar = Integer.parseInt("" + initiative[inipointer].charAt(1));
-            taketurn(player[curchar]);
+            takeTurn(player[curchar]);
         } else {
             curchar = Integer.parseInt("" + initiative[inipointer].charAt(1));
-            enemyturn(enemy[curchar]);
+            enemyTurn(enemy[curchar]);
        }
     }
 
-    public void updatestats() {
+    private void updateStats() {
         //update AP and health stats for both teams
         for (int i = 0; i < 4; i++) {
             phealth[i].setText("Health: " + player[i].getCurrentHealth() + "/" + player[i].getStats().getMaxhealth());
@@ -552,12 +558,10 @@ public class Battle extends JFrame {
         }
     }
 
-//    public void readmove() {
-//        int pointer = 0;
-//        String move = attacker.moves[curmove];
-//        switch (move.substring(pointer, pointer + 3)) {
-//            case "SEL":
-//                pointer += 3;
+    private void readMove(String move) {
+        switch (move.substring(0, 3)) {
+            case "SEL":
+                selfMove(move.substring(3), player[curchar]);
 //                switch (move.substring(pointer, pointer + 3)) {
 //                    case "HEL":
 //                        pointer += 3;
@@ -582,6 +586,8 @@ public class Battle extends JFrame {
 //                            wait.start();
 //                        }
 //                        break;
+
+
 //                    case "DEF":
 //                        pointer += 3;
 //                        int turns = Integer.parseInt("" + move.charAt(pointer));
@@ -593,6 +599,8 @@ public class Battle extends JFrame {
 //                        wait.start();
 //                }
 //                break;
+
+
 //            case "SUP":
 //                pointer += 4;
 //                switch (move.substring(pointer, pointer + 3)) {
@@ -601,24 +609,59 @@ public class Battle extends JFrame {
 //                        break;
 //                }
 //                break;
-//        }
-//    }
-//
+        }
+    }
+
+    private void selfMove(String move, CharacterInstance target) {
+        System.out.println(move);
+        switch (move.substring(0, 3)) {
+
+            //self-healing abilities
+            case "HEL":
+                //work out how much health to restore
+                double amount = Integer.parseInt(move.substring(3,6));
+                amount /= 100;
+                amount *= target.getStats().getMaxhealth();
+                target.modifyHealth((int)amount);
+
+                //add amount of stun turns if any
+                int moveStun = Integer.parseInt(move.substring(6));
+                infobox.setVisible(true);
+                if (moveStun > 0) {
+                    target.stun(Integer.parseInt(move.substring(6)));
+                    infolab.setText(target.getStats().getName() + " used " + target.getStats().getMovname(curmove) + " and is now stunned for " + moveStun + " turns");
+                } else {
+                    infolab.setText(target.getStats().getName() + " used " + target.getStats().getMovname(curmove));
+                }
+                break;
+
+            //self-defence abilities
+            case "DEF":
+
+                break;
+        }
+
+        //update stats and pass turn after move is complete
+        updateStats();
+        turnWait wait = new turnWait();
+        wait.start();
+    }
+
     //Thread to wait between turns for players to read
-    class turnwait extends Thread {
+    class turnWait extends Thread {
         public void run() {
             try {
-                Thread.sleep(2500);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            nextturn();
+            nextTurn();
         }
    }
-//
-//
-//
-//    class Effective extends Thread {
+
+
+
+//    class effective extends Thread {
 //        boolean good;
 //        int team;
 //        int who;
