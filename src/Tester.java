@@ -27,13 +27,6 @@ public class Tester {
         fightCharacters[6] = new CharacterInstance( chars.getAvengers()[30]);
         fightCharacters[7] = new CharacterInstance( chars.getAvengers()[7]);
 
-        String[] weak = fightCharacters[1].getStats().getResistanceCodes();
-        String[] weak2 = fightCharacters[1].getStats().getResistanceNames();
-        for (int i = 0; i < weak.length; i++) {
-            System.out.println(weak[i]);
-            System.out.println(weak2[i]);
-        }
-
         Battle fight = new Battle(fightCharacters[0],fightCharacters[1],fightCharacters[2],fightCharacters[3],fightCharacters[4],fightCharacters[5],fightCharacters[6],fightCharacters[7], bg);
         fight.setDefaultCloseOperation(3);
         fight.setLayout(null);

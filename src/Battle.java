@@ -56,10 +56,10 @@ public class Battle extends JFrame {
 
     private  int curchar;
     private  int curmove;
+    private boolean targetFriendly;
 
     private  String initiative[] = new String[8];
     private  int inipointer = 7;
-    private  boolean playerturn;
 
     public ActionListener movelistener = new ActionListener() {
         @Override
@@ -488,19 +488,17 @@ public class Battle extends JFrame {
 
     private void testConditions() {
         initiative[0] = "p0";
-        initiative[1] = "p2";
-        player[0].modifyAP(20);
+        initiative[1] = "p3";
         player[0].modifyHealth(-30);
+        player[3].modifyHealth(-30);
         updateStats();
     }
 
     private void enemyTurn(CharacterInstance curr) {
         System.out.println(curr.getStats().getName());
-        playerturn = false;
     }
 
     private void takeTurn(CharacterInstance curr) {
-        playerturn = true;
         System.out.println(curr.getStats().getName());
 
         //indicates to the player whose turnh it is
@@ -509,6 +507,10 @@ public class Battle extends JFrame {
         if (curr.getBlockingTurns() > 0) {
             curr.block(-1);
         }
+        //adds any healing traits the character has
+        curr.modifyHealth(curr.getStats().getHealFactor());
+
+        //if player is not stunned then take the turn
         if (curr.getStunTurns() > 0) {
             //end turn if stunned
             curr.stun(-1);
@@ -522,6 +524,7 @@ public class Battle extends JFrame {
             turnbox.setVisible(true);
             turnap.setText("Action Points to spend: " + player[curchar].getCurrentAP());
         }
+        updateStats();
     }
 
     private void nextTurn() {
@@ -560,60 +563,36 @@ public class Battle extends JFrame {
 
     private void readMove(String move) {
         switch (move.substring(0, 3)) {
+            //redirects the move to selecting a target or the appropriate logic to handle it
             case "SEL":
                 selfMove(move.substring(3), player[curchar]);
-//                switch (move.substring(pointer, pointer + 3)) {
-//                    case "HEL":
-//                        pointer += 3;
-//                        double amount = Integer.parseInt(move.substring(pointer, pointer + 3)) / 100.0;
-//                        char stun = move.charAt(9);
-//                        amount = amount * attacker.maxhealth;
-//                        attacker.currhealth += amount;
-//                        if (attacker.currhealth > attacker.maxhealth) {
-//                            attacker.currhealth = attacker.maxhealth;
-//                        }
-//                        updatestats();
-//                        if (stun == '0') {
-//                            infobox.setVisible(true);
-//                            infolab.setText(attacker.name + " used " + attacker.movname[curmove]);
-//                            turnwait wait = new turnwait();
-//                            wait.start();
-//                        } else {
-//                            attacker.stunned += 1;
-//                            infobox.setVisible(true);
-//                            infolab.setText(attacker.name + " used " + attacker.movname[curmove] + " and is now stunned");
-//                            turnwait wait = new turnwait();
-//                            wait.start();
-//                        }
-//                        break;
+                break;
 
-
-//                    case "DEF":
-//                        pointer += 3;
-//                        int turns = Integer.parseInt("" + move.charAt(pointer));
-//                        attacker.blocking += turns;
-//                        infobox.setVisible(true);
-//                        infolab.setText(attacker.name + " used " + attacker.movname[curmove] + " and takes reduced damage for " + turns + " turns");
-//                        updatestats();
-//                        turnwait wait = new turnwait();
-//                        wait.start();
-//                }
-//                break;
-
-
-//            case "SUP":
-//                pointer += 4;
-//                switch (move.substring(pointer, pointer + 3)) {
-//                    case "STU":
-//
-//                        break;
-//                }
-//                break;
+            case "SUP":
+                if (move.charAt(3) == '1') {
+                    if (move.charAt(4) == '1') {
+                        supportMove(move.substring(5), player[curchar], enemy);
+                    } else {
+                        targetFriendly = false;
+                    }
+                } else {
+                    if (move.charAt(4) == '1') {
+                        supportMove(move.substring(5), player[curchar], player);
+                    } else {
+                        targetFriendly = true;
+                    }
+                }
+                    break;
         }
+    }
+
+    private void supportMove(String move, CharacterInstance attacker, CharacterInstance[] targets) {
+
     }
 
     private void selfMove(String move, CharacterInstance target) {
         System.out.println(move);
+        infobox.setVisible(true);
         switch (move.substring(0, 3)) {
 
             //self-healing abilities
@@ -626,7 +605,6 @@ public class Battle extends JFrame {
 
                 //add amount of stun turns if any
                 int moveStun = Integer.parseInt(move.substring(6));
-                infobox.setVisible(true);
                 if (moveStun > 0) {
                     target.stun(Integer.parseInt(move.substring(6)));
                     infolab.setText(target.getStats().getName() + " used " + target.getStats().getMovname(curmove) + " and is now stunned for " + moveStun + " turns");
@@ -637,7 +615,9 @@ public class Battle extends JFrame {
 
             //self-defence abilities
             case "DEF":
-
+                int turns = Integer.parseInt("" + move.charAt(3));
+                target.block(turns);
+                infolab.setText(target.getStats().getName() + " used " + target.getStats().getMovname(curmove) + " and takes reduced damage for " + turns + " turns");
                 break;
         }
 
@@ -645,6 +625,52 @@ public class Battle extends JFrame {
         updateStats();
         turnWait wait = new turnWait();
         wait.start();
+    }
+
+    //fetches the appropriate base damage range for the move type
+    private int getBaseDam(String moveCode, CharacterInstance attacker) {
+        switch (moveCode) {
+            case "PHY":
+                return attacker.getStats().getStrength();
+            case "BUL":
+                return 7;
+            case "ELE":
+                return 7;
+            case "GRO":
+                return 7;
+            case "LAS":
+                return 8;
+            case "BLA":
+                return 7;
+            case "VIB":
+                return 10;
+            case "ADA":
+                return 10;
+            case "AVE":
+                return 10;
+            case "PSY":
+                return 9;
+            case "ANT":
+                return 9;
+            case "EMP":
+                return 7;
+            case "FIR":
+                return 7;
+            case "EXP":
+                return 9;
+            case "POI":
+                return 8;
+            case "MAG":
+                return 9;
+            case "RAD":
+                return 10;
+            case "WAT":
+                return 6;
+            case "AIR":
+                return 6;
+            default:
+                return 0;
+        }
     }
 
     //Thread to wait between turns for players to read

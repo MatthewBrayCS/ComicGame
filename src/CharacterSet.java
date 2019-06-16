@@ -11,7 +11,7 @@ class CharacterSet {
     String[] moveset = new String[4];
     moveset[0] = "DAM0L1PHY0";
     moveset[1] = "DAM0L2PHYVIB1HAP";
-    moveset[2] = "DAM0M2PHYVIB0";
+    moveset[2] = "DAM0M2PHYVIB1STU";
     moveset[3] = "SELDEF3";
 
     String[] movenam = new String[4];
@@ -163,7 +163,7 @@ class CharacterSet {
             movebio, "FLI","EMP","ELEBULBLAFIRLAS");
 
     moveset[0] = "DAM0L1PHY0";
-    moveset[1] = "SUP1STU2";
+    moveset[1] = "SUP10STU2";
     moveset[2] = "DAM0M1PHY0";
     moveset[3] = "SELHEL0750";
 
@@ -182,7 +182,7 @@ class CharacterSet {
             movebio, "FLI","EMP","ELEPOI");
 
     moveset[0] = "DAM0L1PHY0";
-    moveset[1] = "SUP1STU2";
+    moveset[1] = "SUP10STU2";
     moveset[2] = "SELDEF2";
     moveset[3] = "DAM0H1PHY0";
 
@@ -201,7 +201,7 @@ class CharacterSet {
             movebio, "HEL4","","PHYEMP");
 
     moveset[0] = "DAM0L1PHY0";
-    moveset[1] = "SUP1STU2";
+    moveset[1] = "SUP10STU2";
     moveset[2] = "DAM0M1POI0";
     moveset[3] = "DAM0H1PHY0";
 
@@ -220,7 +220,7 @@ class CharacterSet {
             movebio, "HEL3","","PHYEMPPOI");
 
     moveset[0] = "DAM0L1PHY0";
-    moveset[1] = "SUP1STU1";
+    moveset[1] = "SUP10STU1";
     moveset[2] = "DAM0M1PHY0";
     moveset[3] = "DAM0H1BLA0";
 
@@ -334,7 +334,7 @@ class CharacterSet {
             movebio, "HEL5","VIBADAMAGPSYRAD","PHYBULEXPBLALASPOIEMP");
 
     moveset[0] = "DAM0L1WAT0";
-    moveset[1] = "SUP1STU2";
+    moveset[1] = "SUP11STU1";
     moveset[2] = "DAM0M1GRO0";
     moveset[3] = "DAM0H1GFIR0";
 
@@ -344,7 +344,7 @@ class CharacterSet {
     movenam[3] = "Flames";
 
     movebio[0] = "Use water to attack the enemy for low damage. Types: Water";
-    movebio[1] = "Freeze an enemy stopping them from acting for 2 turns.";
+    movebio[1] = "Freeze the enemy team in their tracks, stunning them all for 1 turn.";
     movebio[2] = "Use rocks to crush your enemy for medium damage. Types: Ground";
     movebio[3] = "Use flames to burn your enemy for high damage. Types: Fire";
 
@@ -355,7 +355,7 @@ class CharacterSet {
     moveset[0] = "DAM0L1PHY0";
     moveset[1] = "DAM0M2MAGPHY0";
     moveset[2] = "DAM0H1MAG0";
-    moveset[3] = "SUP0HEL11002";
+    moveset[3] = "SUP01HEL1002";
 
     movenam[0] = "Punch";
     movenam[1] = "Telekinesis";
@@ -449,7 +449,7 @@ class CharacterSet {
 
     moveset[0] = "DAM0L2PHYAVE0";
     moveset[1] = "DAM0M2PHYAVE0";
-    moveset[2] = "SUP0HEL00500";
+    moveset[2] = "SUP00HEL0500";
     moveset[3] = "DAM0H2BLAAVE0";
 
     movenam[0] = "Punch";

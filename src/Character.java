@@ -15,9 +15,9 @@ public class Character {
     private int constitution;
     private int maxhealth;
 
-    private String moves[] = new String[4];
-    private String movname[] = new String[4];
-    private String movdesc[] = new String[4];
+    private String[] moves = new String[4];
+    private String[] movname = new String[4];
+    private String[] movdesc = new String[4];
     private int healFactor;
     private boolean flying = false;
     private String[] weaknessNames;
